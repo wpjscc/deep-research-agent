@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use NeuronAI\Workflow\Event;
+use NeuronAI\Workflow\Events\Event;
 
 class ProgressEvent implements Event
 {

@@ -9,7 +9,7 @@ use App\Events\ProgressEvent;
 use App\Prompts;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Workflow\Node;
-use NeuronAI\Workflow\StartEvent;
+use NeuronAI\Workflow\Events\StartEvent;
 use NeuronAI\Workflow\WorkflowState;
 
 class GenerateQueries extends Node

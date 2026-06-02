@@ -16,7 +16,7 @@ class DeepResearchAgent extends Workflow
      */
     public function __construct(string $query, protected int $maxSections = 3)
     {
-        parent::__construct(new WorkflowState(['topic' => $query]));
+        parent::__construct(state: new WorkflowState(['topic' => $query]));
     }
 
     protected function nodes(): array

@@ -19,12 +19,12 @@ if (empty($input)) {
 
 $workflow = new DeepResearchAgent($input, 3);
 
-$handler = $workflow->start();
+$handler = $workflow->init();
 
-foreach ($handler->streamEvents() as $event) {
+foreach ($handler->events() as $event) {
     if ($event instanceof ProgressEvent) {
         echo $event->message;
     }
 }
 
-echo "\n".$handler->getResult()->get('report')."\n";
+echo "\n".$handler->run()->get('report')."\n";

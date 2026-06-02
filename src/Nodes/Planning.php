@@ -10,7 +10,7 @@ use App\Events\SectionGenerationEvent;
 use App\Prompts;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Workflow\Node;
-use NeuronAI\Workflow\StartEvent;
+use NeuronAI\Workflow\Events\StartEvent;
 use NeuronAI\Workflow\WorkflowState;
 
 class Planning extends Node
@@ -25,7 +25,7 @@ class Planning extends Node
 
         /** @var ReportPlanOutput $plan */
         $plan = ResearchAgent::make()
-            ->withInstructions(
+            ->setInstructions(
                 "You are an expert in research. You are given a user query and you need to generate a report plan for the user."
             )
             ->structured(

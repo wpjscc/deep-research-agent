@@ -9,10 +9,11 @@ use App\Events\SectionGenerationEvent;
 use App\Prompts;
 use App\SearchWorkflow;
 use NeuronAI\Chat\Messages\AssistantMessage;
+use NeuronAI\Chat\Messages\Stream\Chunks\TextChunk;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Exceptions\WorkflowException;
 use NeuronAI\Workflow\Node;
-use NeuronAI\Workflow\WorkflowInterrupt;
+use NeuronAI\Workflow\Interrupt\WorkflowInterrupt;
 use NeuronAI\Workflow\WorkflowState;
 
 /**
@@ -34,25 +35,27 @@ class GenerateSectionContent extends Node
             return new FormattingReportEvent($event->plan);
         }
 
-        $handler = SearchWorkflow::make(new WorkflowState(['query' => $event->plan->sections[$index]->description]))->start();
-        foreach ($handler->streamEvents() as $streamedEvent) {
+        $handler = SearchWorkflow::make(state: new WorkflowState(['query' => $event->plan->sections[$index]->description]))->init();
+        foreach ($handler->events() as $streamedEvent) {
             yield $streamedEvent;
         }
-        $searchState = $handler->getResult();
+        $searchState = $handler->run();
 
         $prompt = \str_replace('{section_topic}', $event->plan->sections[$index]->description, Prompts::SECTION_WRITER_INSTRUCTIONS);
         $prompt = \str_replace('{context}', \implode("\n", $searchState->get('results')), $prompt);
 
         yield new ProgressEvent("\n\n========== Generating content for section: {$event->plan->sections[$index]->name} ==========\n\n");
 
-        $stream = ResearchAgent::make()->stream(new UserMessage($prompt));
+        $handler = ResearchAgent::make()->stream(new UserMessage($prompt));
 
-        foreach ($stream as $text) {
-            yield new ProgressEvent($text);
+        foreach ($handler->events() as $chunk) {
+            if ($chunk instanceof TextChunk) {
+                yield new ProgressEvent($chunk->content);
+            }
         }
 
         /** @var AssistantMessage $message */
-        $message = $stream->getReturn();
+        $message = $handler->getMessage();
 
         $event->plan->sections[$index]->content = $message->getContent();
 

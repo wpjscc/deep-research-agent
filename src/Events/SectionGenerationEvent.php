@@ -3,7 +3,7 @@
 namespace App\Events;
 
 use App\Agents\ReportPlanOutput;
-use NeuronAI\Workflow\Event;
+use NeuronAI\Workflow\Events\Event;
 
 class SectionGenerationEvent implements Event
 {

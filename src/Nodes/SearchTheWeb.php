@@ -6,7 +6,7 @@ use App\Events\PerformSearchEvent;
 use App\Events\ProgressEvent;
 use NeuronAI\Tools\Toolkits\Tavily\TavilySearchTool;
 use NeuronAI\Workflow\Node;
-use NeuronAI\Workflow\StopEvent;
+use NeuronAI\Workflow\Events\StopEvent;
 use NeuronAI\Workflow\WorkflowState;
 
 class SearchTheWeb extends Node

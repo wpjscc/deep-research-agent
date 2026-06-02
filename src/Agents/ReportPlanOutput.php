@@ -12,7 +12,8 @@ class ReportPlanOutput
      */
     #[SchemaProperty(
         description: 'The sections of the report plan',
-        required: true
+        required: true,
+        anyOf: [ReportSection::class]
     )]
     #[ArrayOf(ReportSection::class)]
     public array $sections;

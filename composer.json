@@ -9,7 +9,7 @@
   ],
   "require": {
     "php": "^8.1",
-    "neuron-core/neuron-ai": "^2.0",
+    "neuron-core/neuron-ai": "^3.3",
     "vlucas/phpdotenv": "^5.6"
   },
   "autoload": {
